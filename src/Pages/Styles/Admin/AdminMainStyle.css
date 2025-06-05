@@ -1,0 +1,75 @@
+.admin-container {
+  display: flex;
+  height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 25%;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-right: 2px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.sidebar h1 {
+  margin-bottom: 40px;
+  text-align: center;
+  color: #007bff;
+}
+
+.dropdown-container {
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+.dropdown {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border: 2px solid #007bff;
+  background-color: white;
+  color: #007bff;
+  font-weight: 600;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-overflow: ellipsis;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.button-group button {
+  padding: 12px;
+  width: 100%;
+  border: 2px solid #007bff;
+  background-color: white;
+  color: #007bff;
+  font-weight: 600;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.button-group button:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.content-area {
+  display: flex;
+  justify-content: center;
+  width: 75%;
+  padding-top: 30px;
+  overflow-y: auto;
+  background-color: #fff;
+}

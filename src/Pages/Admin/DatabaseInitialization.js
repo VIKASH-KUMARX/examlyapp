@@ -1,0 +1,76 @@
+import React, { useState } from 'react';
+import { Button, Toaster, Position } from '@blueprintjs/core';
+
+const AppToaster = Toaster.create({ position: Position.TOP });
+
+export function DatabaseInitialization() {
+  const [selectedFiles, setSelectedFiles] = useState([null, null, null, null]);
+
+  const endpoints = [
+    { year: "Year 1", url: "/api/yearonestudent/upload" },
+    { year: "Year 2", url: "/api/yeartwostudent/upload" },
+    { year: "Year 3", url: "/api/yearthreestudent/upload" },
+    { year: "Year 4", url: "/api/yearfourstudent/upload" },
+    { year: "Course List", url: "/api/course/upload" },
+    { year: "Time table", url: "/api/................." }
+  ];
+
+  const handleFileChange = (e, index) => {
+    const file = e.target.files[0];
+    setSelectedFiles((prev) => {
+      const updated = [...prev];
+      updated[index] = file;
+      return updated;
+    });
+  };
+
+  const handleUpload = async (index) => {
+    const file = selectedFiles[index];
+    const { url, year } = endpoints[index];
+
+    if (!file) {
+      AppToaster.show({ message: `Please select a file for ${year}`, intent: "warning" });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        AppToaster.show({ message: result.message || `${year} upload success!`, intent: "success" });
+      } else {
+        const error = await response.json();
+        AppToaster.show({ message: error.message || `${year} upload failed`, intent: "danger" });
+      }
+    } catch (err) {
+      AppToaster.show({ message: `Upload error: ${err.message}`, intent: "danger" });
+    }
+  };
+
+  return (
+    <div style={{ maxWidth: 500, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <h2>Upload Excel Files</h2>
+      {endpoints.map((endpoint, index) => (
+        <div key={index} style={{ marginBottom: "1.5rem" }}>
+          <label><strong>{endpoint.year}</strong></label>
+          <input
+            type="file"
+            accept=".xls,.xlsx"
+            onChange={(e) => handleFileChange(e, index)}
+            style={{ display: "block", margin: "0.5rem 0" }}
+          />
+          <Button intent="primary" onClick={() => handleUpload(index)}>
+            Upload
+          </Button>
+        </div>
+      ))}
+    </div>
+  );
+}
