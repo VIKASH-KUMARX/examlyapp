@@ -11,8 +11,7 @@ export function DatabaseInitialization() {
     { year: "Year 2", url: "/api/yeartwostudent/upload" },
     { year: "Year 3", url: "/api/yearthreestudent/upload" },
     { year: "Year 4", url: "/api/yearfourstudent/upload" },
-    { year: "Course List", url: "/api/course/upload" },
-    { year: "Time table", url: "/api/................." }
+    { year: "Time Table", url: "/api/course/upload" }
   ];
 
   const handleFileChange = (e, index) => {

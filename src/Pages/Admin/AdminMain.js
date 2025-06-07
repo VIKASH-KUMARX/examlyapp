@@ -12,7 +12,6 @@ import { AdminLoginDB } from './Database_Modification/AdminLoginDB';
 import { DatabaseInitialization } from './DatabaseInitialization';
 import { HallSeatingAllocation } from './Hall_Seating_Allocation/HallSeatingAllocation';
 import { AdminStatus } from './AdminStatus';
-// import { TimeTable } from './Database_Modification/TimeTable';
 
 export function AdminMain() {
   const [selectedPage, setSelectedPage] = useState(null);
@@ -42,7 +41,6 @@ export function AdminMain() {
       case 'year3': return <YearThreeStudents />;
       case 'year4': return <YearFourStudents />;
       case 'courses': return <FullCourseList />;
-      // case 'timeTable': return <TimeTable />;
       case 'studentLoginDB': return <StudentLoginDB />;
       case 'adminLoginDB': return <AdminLoginDB />;
       case 'init': return <DatabaseInitialization />;
@@ -70,8 +68,7 @@ export function AdminMain() {
             <option value="year2">Year 2 Students</option>
             <option value="year3">Year 3 Students</option>
             <option value="year4">Year 4 Students</option>
-            <option value="courses">Full Course List</option>
-            {/* <option value="timeTable">Time Table</option> */}
+            <option value="courses">Course Time Table</option>
             <option value="studentLoginDB">Student Login DB</option>
             <option value="adminLoginDB">Admin Login DB</option>
           </select>

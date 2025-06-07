@@ -5,6 +5,8 @@ import { H1, H4 } from '@blueprintjs/core';
 export function StudentMain() {
 
   const [studentData, setStudentData] = useState([]);
+  const [examData, setExamData] = useState([]);
+  const [filteredExamData, setFilteredExamData] = useState([]);
   
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -19,6 +21,51 @@ export function StudentMain() {
   
   const Year = String(studentData.regnum || "").substring(4, 6);
   const Batch = `20${Year} - 20${parseInt(Year) + 4}`;
+
+  useEffect(() => {
+    fetch("/api/course")
+      .then((response) => response.json())
+      .then((json) => setExamData(json))
+      .catch((error) => console.error("Error in Fetch!", error));
+  }, []);  
+
+  // useEffect(() => {
+  //   if (studentData.courses && examData.length > 0) {
+  //     const studentCourses = Array.isArray(studentData.courses)
+  //       ? studentData.courses
+  //       : JSON.parse(studentData.courses);
+
+  //     const orderedFiltered = studentCourses.map((code) => 
+  //       examData.find((exam) => 
+  //         exam.coursecode === code ))
+  //           .filter(Boolean); // remove undefined if any course code doesn't match
+
+  //     setFilteredExamData(orderedFiltered);
+  //   }
+  // }, [studentData, examData]);
+
+  useEffect(() => {
+  if (studentData.courses && examData.length > 0) {
+    const studentCourses = Array.isArray(studentData.courses)
+      ? studentData.courses
+      : JSON.parse(studentData.courses);
+
+    const filtered = examData.filter(exam =>
+      studentCourses.includes(exam.coursecode)
+    );
+
+    const sorted = filtered.sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      if (dateA - dateB !== 0) return dateA - dateB;
+      return a.session === 'FN'
+        ? -1
+        : 1;
+    });
+
+    setFilteredExamData(sorted);
+  }
+}, [studentData, examData]);
 
   return (
     <div style={{ fontFamily: 'sans-serif', padding: '30px', color: '#111' }}>
@@ -75,33 +122,28 @@ export function StudentMain() {
       </div>
 
       {/* Seating Allotment Section */}
-      <div style={{ marginTop: '30px' }}>
-        <h2 style={{ marginBottom: '20px' }}>Seating Allotment</h2>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <H4 style={{ width: '200px', margin: 0 }}>Course Title :</H4>
-            <p style={{ fontWeight: 'bold', margin: 0 }}> </p>
+      <div style={{ marginTop: '40px' }}>
+        <h2 style={{ marginBottom: '40px' }}>Seating Allotment</h2>
+          <div style={{display : 'flex' ,marginBottom:'30px',gap:'10px'}}>
+            <H4 style={{ width: '50px', margin: 0 }}>S.No</H4>
+            <H4 style={{ width: '150px', margin: 0 }}>Course Code</H4>
+            <H4 style={{ width: '250px', margin: 0 }}>Course Title</H4>
+            <H4 style={{ width: '150px', margin: 0 }}>Exam Date</H4>
+            <H4 style={{ width: '100px', margin: 0 }}>Session</H4>
+            <H4 style={{ width: '150px', margin: 0 }}>Hall Number</H4>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <H4 style={{ width: '200px', margin: 0 }}>Course Code :</H4>
-            <p style={{ fontWeight: 'bold', margin: 0 }}> </p>
+          <div>
+            {filteredExamData.map((data,index) => (
+              <div key={index} style={{display:'flex',marginBottom:'20px',gap:'10px'}}>
+                <p style={{ width: '50px', margin: 0 }}>{index + 1}</p>
+                <p style={{ width: '150px', margin: 0 }}>{data.coursecode}</p>
+                <p style={{ width: '250px', margin: 0 }}>{data.coursename}</p>
+                <p style={{ width: '150px', margin: 0 }}>{data.date}</p>
+                <p style={{ width: '100px', margin: 0 }}>{data.session}</p>
+                <p style={{ width: '100px', margin: 0 }}>{studentData.roomno ? studentData.roomno : "Not Allocated"}</p>
+              </div>
+            ))}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <H4 style={{ width: '200px', margin: 0 }}>Exam Date :</H4>
-            <p style={{ fontWeight: 'bold', margin: 0 }}> </p>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <H4 style={{ width: '200px', margin: 0 }}>Session :</H4>
-            <p style={{ fontWeight: 'bold', margin: 0 }}> </p>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <H4 style={{ width: '200px', margin: 0 }}>Hall Number :</H4>
-            <p style={{ fontWeight: 'bold', margin: 0 }}>
-              {studentData.roomno && studentData.roomno.length > 0 ? studentData.roomno : 'Not Allocated'}
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   );
