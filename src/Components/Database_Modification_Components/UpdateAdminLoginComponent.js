@@ -5,9 +5,14 @@ const AppToaster = Toaster.create({
   position: Position.TOP,
 });
 
-export function UpdateAdminLoginComponent({ API }) {
+export function UpdateAdminLoginComponent({ API ,setRefresh}) {
   const [usernameInput, setUsernameInput] = useState('');
+  const [comfirmPassword, setComfirmPassword] = useState('');
   const [adminData, setAdminData] = useState('');
+
+  useEffect(()=>{
+    setComfirmPassword(adminData.password);
+  },[adminData.password])
 
   const fetchAdminLogin = () => {
     if (!usernameInput) {
@@ -21,23 +26,28 @@ export function UpdateAdminLoginComponent({ API }) {
         return res.json();
       })
       .then((data) => setAdminData(data))
-      .catch((err) =>
-        AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000 })
-      );
+      .catch((err) =>{
+        if(err.message==='Admin not found')
+          AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000 })
+        else
+          console.error('Error in Admin fetch! : ',err)
+      });
   };
 
   const updateAdminLogin = () => {
-    if (!adminData.password) {
-      AppToaster.show({ message: 'All fields are required!', intent: 'warning', timeout: 2000 });
+    if (adminData.password.length<8) {
+      AppToaster.show({ message: 'Password must be atleast 8 Characters!', intent: 'warning', timeout: 3000 });
       return;
     }
 
-    adminData.password = adminData.password.trim();
-
-    if (adminData.password.length===0) {
-      AppToaster.show({ message: 'All fields are required!', intent: 'warning', timeout: 2000 });
-      return;
-    }
+    if(adminData.password !== comfirmPassword) {
+        AppToaster.show({
+          message: 'Password Mismatch!',
+          intent: 'warning',
+          timeout: 2000,
+        });
+        return;
+      }
 
     fetch(`${API}/${usernameInput}`, {
       method: 'PUT',
@@ -47,13 +57,18 @@ export function UpdateAdminLoginComponent({ API }) {
       .then((res) => {
         if (!res.ok) throw new Error('Update failed');
         AppToaster.show({ message: 'Admin Login updated!', intent: 'success', timeout: 2000 })
-        setUsernameInput('')
-        setAdminData('')
+        setUsernameInput('');
+        setAdminData('');
+        setComfirmPassword('');
+        setRefresh(prev=>!prev);
         return res.json();
       })
-      .catch((err) =>
-        AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000 })
-      );
+      .catch((err) =>{
+        if(err.message==='Update failed')
+          AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000 })
+        else
+          console.error('Error in Admin update : ',err)
+      });
   };
 
   return (
@@ -78,12 +93,22 @@ export function UpdateAdminLoginComponent({ API }) {
 
       {adminData && (
         <>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <label style={{width: '80px'}}>Password :</label>
-            <InputGroup
-              value={adminData.password}
-              onChange={(e) => setAdminData({ ...adminData, password: e.target.value })}
-            />
+          <div style={{ display: 'flex', flexDirection:'column', justifyContent: 'center', alignItems: 'center', gap:'12px'  }}>
+            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+              <label style={{width: '80px'}}>Password :</label>
+              <InputGroup
+                value={adminData.password}
+                onChange={(e) => setAdminData({ ...adminData, password: e.target.value })}
+              />
+            </div>
+            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+              <label style={{width: '80px'}}>Comfirm :</label>
+              <InputGroup
+                value={comfirmPassword}
+                onChange={(e) => setComfirmPassword(e.target.value)}
+                placeholder='Comfirm Password'
+              />
+            </div>
           </div>
 
           <div style={{ textAlign: 'center' }}>

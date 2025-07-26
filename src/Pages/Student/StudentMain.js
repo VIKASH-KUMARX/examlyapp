@@ -16,7 +16,7 @@ export function StudentMain() {
     fetch(API)
       .then((response) => response.json())
       .then((data) => setStudentData(data))
-      .catch((error) => console.error("Error in Fetch!", error));
+      .catch((error) => console.error("Error in student data Fetch! - ", error));
   }, [API]);
   
   const Year = String(studentData.regnum || "").substring(4, 6);
@@ -26,7 +26,7 @@ export function StudentMain() {
     fetch("/api/course")
       .then((response) => response.json())
       .then((json) => setExamData(json))
-      .catch((error) => console.error("Error in Fetch!", error));
+      .catch((error) => console.error("Error in courses Fetch! - ", error));
   }, []);  
 
   // useEffect(() => {
@@ -48,7 +48,7 @@ export function StudentMain() {
   if (studentData.courses && examData.length > 0) {
     const studentCourses = Array.isArray(studentData.courses)
       ? studentData.courses
-      : JSON.parse(studentData.courses);
+      : studentData.courses.split(',');
 
     const filtered = examData.filter(exam =>
       studentCourses.includes(exam.coursecode)
@@ -72,9 +72,7 @@ export function StudentMain() {
       
       <h2 style={{ marginBottom: '20px' }}>Dashboard</h2>
 
-      {/* Profile Section */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '40px' }}>
-        {/* Profile Icon */}
         <div style={{
           width: '100px',
           height: '100px',
@@ -85,11 +83,8 @@ export function StudentMain() {
           justifyContent: 'center',
           fontSize: '50px'
         }}>
-          {/* Simple person icon */}
-          <span>👤</span>
+        <span>👤</span>
         </div>
-
-        {/* Name and Details */}
         <div>
           <H1 style={{ margin: 0 }}>Hey {studentData.name && studentData.name.toUpperCase()}</H1>
 
@@ -121,7 +116,6 @@ export function StudentMain() {
         </div>
       </div>
 
-      {/* Seating Allotment Section */}
       <div style={{ marginTop: '40px' }}>
         <h2 style={{ marginBottom: '40px' }}>Seating Allotment</h2>
           <div style={{display : 'flex' ,marginBottom:'30px',gap:'10px'}}>
@@ -133,16 +127,21 @@ export function StudentMain() {
             <H4 style={{ width: '150px', margin: 0 }}>Hall Number</H4>
           </div>
           <div>
-            {filteredExamData.map((data,index) => (
-              <div key={index} style={{display:'flex',marginBottom:'20px',gap:'10px'}}>
-                <p style={{ width: '50px', margin: 0 }}>{index + 1}</p>
-                <p style={{ width: '150px', margin: 0 }}>{data.coursecode}</p>
-                <p style={{ width: '250px', margin: 0 }}>{data.coursename}</p>
-                <p style={{ width: '150px', margin: 0 }}>{data.date}</p>
-                <p style={{ width: '100px', margin: 0 }}>{data.session}</p>
-                <p style={{ width: '100px', margin: 0 }}>{studentData.roomno ? studentData.roomno : "Not Allocated"}</p>
-              </div>
-            ))}
+            {filteredExamData.map((data, index) => {
+              const roomList = studentData.roomno ? studentData.roomno.split(',').map(r => r.trim()) : [];
+              const currentRoom = roomList[index] || "Not Allocated";
+
+              return (
+                <div key={index} style={{ display: 'flex', marginBottom: '20px', gap: '10px' }}>
+                  <p style={{ width: '50px', margin: 0 }}>{index + 1}</p>
+                  <p style={{ width: '150px', margin: 0 }}>{data.coursecode}</p>
+                  <p style={{ width: '250px', margin: 0 }}>{data.coursename}</p>
+                  <p style={{ width: '150px', margin: 0 }}>{data.date}</p>
+                  <p style={{ width: '100px', margin: 0 }}>{data.session}</p>
+                  <p style={{ width: '100px', margin: 0 }}>{currentRoom}</p>
+                </div>
+              );
+            })}
           </div>
       </div>
     </div>

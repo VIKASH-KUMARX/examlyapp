@@ -1,11 +1,10 @@
-import { useState } from 'react';
-import { Button, InputGroup, Toaster, Position } from '@blueprintjs/core';
+import { Button, Toaster, Position } from '@blueprintjs/core';
 
 const AppToaster = Toaster.create({
   position: Position.TOP,
 });
 
-export function DeleteAllStudentComponent({ API }) {
+export function DeleteAllStudentComponent({ API ,setRefresh }) {
 
   const deleteStudent = () => {
     fetch(API, {
@@ -13,10 +12,15 @@ export function DeleteAllStudentComponent({ API }) {
     })
       .then((res) => {
         if (!res.ok) throw new Error('Delete failed');
+        setRefresh(prev=>!prev);
         AppToaster.show({ message: 'All Student deleted!', intent: 'success', timeout: 2000});
       })
-      .catch((err) =>
-        AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000})
+      .catch((err) =>{
+        if(err.message==='Delete failed'){
+          AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000})
+        } else{
+          console.error("error in All student delete : ",err);
+        }}
       );
   };
 

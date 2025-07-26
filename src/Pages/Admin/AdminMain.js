@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './../../Pages/Styles/Admin/AdminMainStyle.css';
-
-// Import pages
 import { YearOneStudents } from './Database_Modification/YearOneStudents';
 import { YearTwoStudents } from './Database_Modification/YearTwoStudents';
 import { YearThreeStudents } from './Database_Modification/YearThreeStudents';
@@ -12,9 +9,10 @@ import { AdminLoginDB } from './Database_Modification/AdminLoginDB';
 import { DatabaseInitialization } from './DatabaseInitialization';
 import { HallSeatingAllocation } from './Hall_Seating_Allocation/HallSeatingAllocation';
 import { AdminStatus } from './AdminStatus';
+import './../../Pages/Styles/Admin/AdminMainStyle.css';
 
 export function AdminMain() {
-  const [selectedPage, setSelectedPage] = useState(null);
+  const [selectedPage, setSelectedPage] = useState('status');
 
   useEffect(() => {
     const savedPage = localStorage.getItem('selectedAdminPage');
@@ -63,7 +61,7 @@ export function AdminMain() {
             value={selectedPage || ''} 
             className="dropdown"
           >
-            <option value="" disabled>Choose Options</option>
+            <option value="">Choose Options</option>
             <option value="year1">Year 1 Students</option>
             <option value="year2">Year 2 Students</option>
             <option value="year3">Year 3 Students</option>

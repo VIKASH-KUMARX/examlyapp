@@ -5,7 +5,7 @@ const AppToaster = Toaster.create({
   position: Position.TOP,
 });
 
-export function DeleteStudentComponent({ API }) {
+export function DeleteStudentComponent({ API ,setRefresh }) {
   const [regnumInput, setRegnumInput] = useState('');
   const [studentData, setStudentData] = useState(null);
 
@@ -21,8 +21,12 @@ export function DeleteStudentComponent({ API }) {
         return res.json();
       })
       .then((data) => setStudentData(data))
-      .catch((err) =>
-        AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000})
+      .catch((err) =>{
+        if(err.message==='Student not found'){
+          AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000})
+        } else{
+          console.error("error in student Fetch! : ",err);
+        }}
       );
   };
 
@@ -35,9 +39,14 @@ export function DeleteStudentComponent({ API }) {
         AppToaster.show({ message: 'Student deleted!', intent: 'success', timeout: 2000});
         setStudentData(null);
         setRegnumInput('');
+        setRefresh(prev=>!prev);
       })
-      .catch((err) =>
-        AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000})
+      .catch((err) =>{
+        if(err.message==='Delete failed')
+          AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000})
+        else
+          console.error('Error in Student delete : ',err)
+      }
       );
   };
 

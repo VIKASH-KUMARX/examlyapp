@@ -10,6 +10,7 @@ export function AdminLoginDB() {
   const API = "/api/login/admin";
 
   const [visibleComponent, setVisibleComponent] = useState(null);
+  const [refresh, setRefresh] = useState(true);
   
   const handleClick = (component) => {
     setVisibleComponent(prev => (prev === component ? null : component));
@@ -18,7 +19,7 @@ export function AdminLoginDB() {
   return (
     <div>
       <div>
-        <ViewLoginDBComponent API={API} />
+        <ViewLoginDBComponent API={API} refresh={refresh} />
       </div>
       <div style={{ display: 'flex', justifyContent:'center', gap: '10px', marginTop: '20px' }}>
         <Button intent="success" onClick={() => handleClick('add')}>Add</Button>
@@ -27,9 +28,9 @@ export function AdminLoginDB() {
       </div>
       
       <div style={{ marginTop: '20px' }}>
-        {visibleComponent === 'add' && <AddAdminLoginComponent API={API} />}
-        {visibleComponent === 'update' && <UpdateAdminLoginComponent API={API} />}
-        {visibleComponent === 'delete' && <DeleteAdminLoginComponent API={API} />}
+        {visibleComponent === 'add' && <AddAdminLoginComponent API={API} setRefresh={setRefresh}/>}
+        {visibleComponent === 'update' && <UpdateAdminLoginComponent API={API} setRefresh={setRefresh}/>}
+        {visibleComponent === 'delete' && <DeleteAdminLoginComponent API={API} setRefresh={setRefresh}/>}
       </div>
     </div>
   );

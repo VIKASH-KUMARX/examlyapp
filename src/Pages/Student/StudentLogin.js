@@ -36,7 +36,7 @@ export function StudentLogin() {
         const year = data.year;
 
         setTimeout(() => {
-          navigate(`/StudentMain?API=api/${year}/${regno}`);
+          navigate(`/studentMain?API=api/${year}/${regno}`);
         }, 1000); 
       } else {
         AppToaster.show({
@@ -47,15 +47,16 @@ export function StudentLogin() {
       }
     } catch (err) {
       AppToaster.show({
-        message: 'Login failed due to network error',
+        message: 'Login failed due to network error, Please try again',
         intent: 'danger',
         timeout: 3000,
       });
+      console.error("err in student login - ",err);
     }
   };
 
   const goToAdminLogin = () => {
-    navigate('/AdminLogin');
+    navigate('/adminLogin');
   };
 
   return (

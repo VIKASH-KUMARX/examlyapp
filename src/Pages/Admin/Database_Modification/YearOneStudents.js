@@ -10,18 +10,21 @@ export function YearOneStudents() {
   const API = "api/yearonestudent";
 
   const [visibleComponent, setVisibleComponent] = useState(null);
+  const [refresh, setRefresh] = useState(true);
+  const [dataLength, setDataLength] = useState(0);
 
   const handleClick = (component) => {
     setVisibleComponent(prev => (prev === component ? null : component));
   };
 
   return (
-    <di>
+    <div>
       <div>
-        <ViewStudentsComponent API={API} />
+        <ViewStudentsComponent API={API} refresh={refresh} setDataLength={setDataLength}/>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '30px', marginBottom: '50px' }}>
+    {dataLength>0 &&
+      (<><div style={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '30px', marginBottom: '50px' }}>
         <Button style={{width: '100%' }} intent="success" onClick={() => handleClick('add')}>Add</Button>
         <Button style={{width: '100%' }} intent="primary" onClick={() => handleClick('update')}>Update</Button>
         <Button style={{width: '100%' }} intent="danger" onClick={() => handleClick('delete')}>Delete</Button>
@@ -29,11 +32,12 @@ export function YearOneStudents() {
       </div>
 
       <div style={{ paddingBottom: '20px' }}>
-        {visibleComponent === 'add' && <AddStudentComponent API={API} />}
-        {visibleComponent === 'update' && <UpdateStudentComponent API={API} />}
-        {visibleComponent === 'delete' && <DeleteStudentComponent API={API} />}
-        {visibleComponent === 'deleteAll' && <DeleteAllStudentComponent API={API} />}
-      </div>
-    </di>
+        {visibleComponent === 'add' && <AddStudentComponent API={API} setRefresh={setRefresh}/>}
+        {visibleComponent === 'update' && <UpdateStudentComponent API={API} setRefresh={setRefresh}/>}
+        {visibleComponent === 'delete' && <DeleteStudentComponent API={API} setRefresh={setRefresh}/>}
+        {visibleComponent === 'deleteAll' && <DeleteAllStudentComponent API={API} setRefresh={setRefresh}/>}
+      </div></>)
+    }
+    </div>
   );
 }

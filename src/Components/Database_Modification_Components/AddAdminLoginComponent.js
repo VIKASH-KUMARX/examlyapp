@@ -5,60 +5,67 @@ const AppToaster = Toaster.create({
   position: Position.TOP,
 })
 
-export function AddAdminLoginComponent({API}) {
+export function AddAdminLoginComponent({API, setRefresh}) {
 
     const [newUsername, setNewUsername] = useState('');
     const [newPassword, setNewPassword] = useState('');
+    const [comfirmPassword, setComfirmPassword] = useState('');
 
-    function addAdminLogin() {
-      if (newUsername.length > 0 && newPassword.length > 0) {
-        const username = newUsername.trim();
-        const password = newPassword.trim();
-    
-        if (username.length === 0 || password.length === 0) {
-          AppToaster.show({
-            message: 'Fields cannot contain only spaces!',
-            intent: 'warning',
-            timeout: 2000,
-          });
-          return;
-        }
-    
-        // Check if username already exists
-        fetch(`${API}/${username}`)
-          .then((res) => {
-            if (res.ok) {
-              throw new Error(`Username "${username}" already exists`);
-            }
-            return addNewAdminLogin(username, password);
-          })
-          .catch((err) => {
-            if (err.message === `Username "${username}" already exists`) {
-              AppToaster.show({
-                message: err.message,
-                intent: 'warning',
-                timeout: 2000,
-              });
-            } else {
-              AppToaster.show({
-                message: `Failed to verify student: ${err.message}`,
-                intent: 'danger',
-                timeout: 3000,
-              });
-            }
-          });
-    
-      } else {
+    function addAdminLogin() 
+    {
+      const username = newUsername.trim();
+
+      if(username.length === 0) {
         AppToaster.show({
-          message: 'All fields are required!',
+          message: 'Username cannot be only spaces!',
           intent: 'warning',
           timeout: 2000,
         });
+        setNewUsername('');
+        return;
       }
+
+      if(newPassword.length<8) {
+        AppToaster.show({
+          message: 'Password must be atleast 8 Characters',
+          intent: 'warning',
+          timeout: 3000,
+        });
+        return;
+      }
+
+      if(newPassword !== comfirmPassword) {
+        AppToaster.show({
+          message: 'Password Mismatch!',
+          intent: 'warning',
+          timeout: 2000,
+        });
+        return;
+      }
+    
+      fetch(`${API}/${username}`)
+        .then((res) => {
+          if (res.ok) {
+            throw new Error(`Username "${username}" already exists`);
+          }
+          return addNewAdminLogin(username, newPassword);
+        })
+        .catch((err) => {
+          if (err.message === `Username "${username}" already exists`) {
+            AppToaster.show({
+              message: err.message,
+              intent: 'warning',
+              timeout: 2000,
+            });
+          } else {
+            console.error("error in adminLogin Fetch? - ",err);
+          }
+        }
+      );
     }
     
-    // Helper function to add student
     async function addNewAdminLogin(loginid, password) {
+      try{
       const response = await fetch(API, {
         method: 'POST',
         headers: {
@@ -75,6 +82,16 @@ export function AddAdminLoginComponent({API}) {
       });
       setNewUsername('');
       setNewPassword('');
+      setComfirmPassword('');
+      setRefresh(prev=>!prev);
+      }catch(err){
+        AppToaster.show({
+          message: 'Add Failed!',
+          intent: 'warning',
+          timeout: 2000,
+        });
+        console.error("error in adding new admin : ",err.message || err);
+      }
     }
     
 
@@ -89,6 +106,11 @@ export function AddAdminLoginComponent({API}) {
         value={newPassword}
         onChange={(e) => setNewPassword(e.target.value)}
         placeholder="Enter new password"
+      />
+      <InputGroup
+        value={comfirmPassword}
+        onChange={(e)=> setComfirmPassword(e.target.value)}
+        placeholder='Comfirm Password'
       />
       <Button intent="success" onClick={addAdminLogin}>
         Add Admin

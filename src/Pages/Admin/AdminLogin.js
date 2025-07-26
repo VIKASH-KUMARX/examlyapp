@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, InputGroup, Toaster, Position } from '@blueprintjs/core';
 
 import './../Styles/LoginStyle.css'
+import { AuthContext } from '../../Components/Authentication/Auth';
 
 const AppToaster = Toaster.create({
   position: Position.TOP,
@@ -13,6 +14,7 @@ export function AdminLogin() {
   const [username, setusername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const { setLogin } = useContext(AuthContext);
 
   const handleLogin = async () => {
     try {
@@ -34,9 +36,9 @@ export function AdminLogin() {
           intent: 'success',
           timeout: 800,
         });
-
+        setLogin(true);
         setTimeout(() => {
-          navigate('/AdminMain');
+          navigate('/adminMain');
         }, 1000);
       } else {
         AppToaster.show({
@@ -47,15 +49,16 @@ export function AdminLogin() {
       }
     } catch (err) {
       AppToaster.show({
-        message: 'Login failed due to network error',
+        message: 'Login failed due to network error Please try again',
         intent: 'danger',
         timeout: 3000,
       });
+      console.error("err in admin login - ",err);
     }
   };
 
   const goToStudentLogin = () => {
-    navigate('/StudentLogin');
+    navigate('/studentLogin');
   };
 
   return (

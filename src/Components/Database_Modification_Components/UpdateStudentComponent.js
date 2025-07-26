@@ -5,7 +5,7 @@ const AppToaster = Toaster.create({
   position: Position.TOP,
 });
 
-export function UpdateStudentComponent({ API }) {
+export function UpdateStudentComponent({ API ,setRefresh}) {
   const [regnumInput, setRegnumInput] = useState('');
   const [studentData, setStudentData] = useState(null);
 
@@ -20,10 +20,20 @@ export function UpdateStudentComponent({ API }) {
         if (!res.ok) throw new Error('Student not found');
         return res.json();
       })
-      .then((data) => setStudentData(data))
-      .catch((err) =>
-        AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000 })
-      );
+      .then((data) => {
+        const cleanedCourses =
+         typeof data.courses === 'string' ?
+          data.courses.split(',').join(', ')
+          : '';
+
+        setStudentData({ ...data, courses: cleanedCourses });
+      })
+      .catch((err) =>{
+        if(err.message==='Student not found')
+          AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000 })
+        else
+          console.error('Error in Student fetch! : ',err)
+      });
   };
 
   const updateStudent = () => {
@@ -33,7 +43,7 @@ export function UpdateStudentComponent({ API }) {
     }
 
     studentData.name = studentData.name.trim();
-    studentData.courses = studentData.courses.trim();
+    studentData.courses = studentData.courses.split(',').map(c => c.trim()).filter(c => c.length > 0).join(',');
 
     if (studentData.name.length===0 || studentData.courses.length===0) {
       AppToaster.show({ message: 'All fields are required!', intent: 'warning', timeout: 2000 });
@@ -50,11 +60,15 @@ export function UpdateStudentComponent({ API }) {
         AppToaster.show({ message: 'Student updated!', intent: 'success', timeout: 2000 })
         setRegnumInput('')
         setStudentData(null)
+        setRefresh(prev=>!prev);
         return res.json();
       })
-      .catch((err) =>
-        AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000 })
-      );
+      .catch((err) =>{
+        if(err.message==='Update failed')
+          AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000 })
+        else
+          console.error('Error in Student update : ',err)
+      });
   };
 
   return (

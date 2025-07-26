@@ -1,4 +1,5 @@
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { HomePage } from './Pages/HomePage';
 import { StudentLogin } from './Pages/Student/StudentLogin';
 import { StudentMain } from './Pages/Student/StudentMain';
@@ -8,8 +9,6 @@ import { AdminLogin } from './Pages/Admin/AdminLogin';
 import { AdminMain } from './Pages/Admin/AdminMain';
 import { AdminStatus } from './Pages/Admin/AdminStatus';
 import { HallSeatingAllocation } from './Pages/Admin/Hall_Seating_Allocation/HallSeatingAllocation';
-import { DatabaseInitialization } from './Pages/Admin/DatabaseInitialization';
-import { DatabaseModification } from './Pages/Admin/DatabaseModification';
 import { YearOneStudents } from './Pages/Admin/Database_Modification/YearOneStudents';
 import { YearTwoStudents } from './Pages/Admin/Database_Modification/YearTwoStudents';
 import { YearThreeStudents } from './Pages/Admin/Database_Modification/YearThreeStudents';
@@ -17,31 +16,38 @@ import { YearFourStudents } from './Pages/Admin/Database_Modification/YearFourSt
 import { FullCourseList } from './Pages/Admin/Database_Modification/FullCourseList';
 import { StudentLoginDB } from './Pages/Admin/Database_Modification/StudentLoginDB';
 import { AdminLoginDB } from './Pages/Admin/Database_Modification/AdminLoginDB';
+import { RoomDetails } from './Pages/Admin/Hall_Seating_Allocation/RoomDetails';
+import { Auth } from './Components/Authentication/Auth';
+import { ReqAuth } from './Components/Authentication/ReqAuth';
+import { PageNotFound } from './Components/Authentication/PageNotFound';
 
 function App() {
   return (
-    <Router>
+    <Auth>
+      <div className='App'>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/StudentLogin" element={<StudentLogin />} />
-        <Route path="/StudentMain" element={<StudentMain />} />
-        <Route path="/SuperAdminLogin" element={<SuperAdminLogin />} />
-        <Route path="/SuperAdminMain" element={<SuperAdminMain />} />
-        <Route path="/AdminLogin" element={<AdminLogin />} />
-        <Route path="/AdminMain" element={<AdminMain />} />
-        <Route path="/AdminStatus" element={<AdminStatus />} />
-        <Route path="/DatabaseInitialization" element={<DatabaseInitialization />} />
-        <Route path="/HallSeatingAllocation" element={<HallSeatingAllocation />} />
-        <Route path="/DatabaseModification" element={<DatabaseModification />} />
-        <Route path="/YearOneStudents" element={<YearOneStudents />} />
-        <Route path="/YearTwoStudents" element={<YearTwoStudents />} />
-        <Route path="/YearThreeStudents" element={<YearThreeStudents />} />
-        <Route path="/YearFourStudents" element={<YearFourStudents />} />
-        <Route path="/FullCourseList" element={<FullCourseList />} />
-        <Route path="/StudentLoginDB" element={<StudentLoginDB />} />
-        <Route path="/AdminLoginDB" element={<AdminLoginDB />} />
+        <Route path="/studentLogin" element={<StudentLogin />} />
+        <Route path="/studentMain" element={<StudentMain />} />
+        <Route path="/superAdminLogin" element={<SuperAdminLogin />} />
+        <Route path="/superAdminMain" element={<SuperAdminMain />} />
+        <Route path="/adminLogin" element={<AdminLogin />} />
+        <Route path="/adminMain" element={<ReqAuth><AdminMain /></ReqAuth>} >
+          <Route path="adminStatus" element={<ReqAuth><AdminStatus /></ReqAuth>} />
+          <Route path="hallSeatingAllocation" element={<ReqAuth><HallSeatingAllocation /></ReqAuth>}/>
+          <Route path="yearOneStudents" element={<ReqAuth><YearOneStudents /></ReqAuth>} />
+          <Route path="yearTwoStudents" element={<ReqAuth><YearTwoStudents /></ReqAuth>} />
+          <Route path="yearThreeStudents" element={<ReqAuth><YearThreeStudents /></ReqAuth>} />
+          <Route path="yearFourStudents" element={<ReqAuth><YearFourStudents /></ReqAuth>} />
+          <Route path="fullCourseList" element={<ReqAuth><FullCourseList /></ReqAuth>} />
+          <Route path="studentLoginDB" element={<ReqAuth><StudentLoginDB /></ReqAuth>} />
+          <Route path="adminLoginDB" element={<ReqAuth><AdminLoginDB /></ReqAuth>} />
+        </Route>
+        <Route path="/roomDetails" element={<ReqAuth><RoomDetails/></ReqAuth>}/>
+        <Route path='*' element={<PageNotFound/>}/>
       </Routes>
-    </Router>
+      </div>
+    </Auth>
   );
 }
 

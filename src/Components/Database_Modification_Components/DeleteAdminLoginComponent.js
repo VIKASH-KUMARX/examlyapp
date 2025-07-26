@@ -5,7 +5,7 @@ const AppToaster = Toaster.create({
   position: Position.TOP,
 });
 
-export function DeleteAdminLoginComponent({ API }) {
+export function DeleteAdminLoginComponent({ API ,setRefresh}) {
   const [usernameInput, setUsernameInput] = useState('');
   const [adminLoginData, setAdminLoginData] = useState(null);
 
@@ -21,8 +21,12 @@ export function DeleteAdminLoginComponent({ API }) {
         return res.json();
       })
       .then((data) => setAdminLoginData(data))
-      .catch((err) =>
-        AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000})
+      .catch((err) =>{
+        if(err.message==='Admin not found'){
+          AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000})
+        } else{
+          console.error("error in admin Fetch! : ",err);
+        }}
       );
   };
 
@@ -31,13 +35,18 @@ export function DeleteAdminLoginComponent({ API }) {
       method: 'DELETE',
     })
       .then((res) => {
-        if (!res.ok) throw new Error('Delete failed');
-        AppToaster.show({ message: 'Admin deleted!', intent: 'success', timeout: 2000});
+        if(!res.ok) throw new Error('Delete failed');
+        AppToaster.show({ message: 'Admin deleted', intent: 'success', timeout: 2000});
         setAdminLoginData(null);
         setUsernameInput('');
+        setRefresh(prev=>!prev);
       })
-      .catch((err) =>
-        AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000})
+      .catch((err) =>{
+        if(err.message==='Delete failed'){
+          AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000})
+        } else{
+          console.error("Error in Admin delete : ",err);
+        }}
       );
   };
 

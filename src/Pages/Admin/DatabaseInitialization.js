@@ -46,10 +46,11 @@ export function DatabaseInitialization() {
         AppToaster.show({ message: result.message || `${year} upload success!`, intent: "success" });
       } else {
         const error = await response.json();
-        AppToaster.show({ message: error.message || `${year} upload failed`, intent: "danger" });
+        AppToaster.show({ message: `${year} data upload failed, Please try again`, intent: "danger" });
+        throw new Error(error.message || `${year} data upload failed`);
       }
     } catch (err) {
-      AppToaster.show({ message: `Upload error: ${err.message}`, intent: "danger" });
+      console.error("error in excel post - ", err.message || err);
     }
   };
 

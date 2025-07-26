@@ -15,15 +15,17 @@ export function FullCourseList() {
         setLoading(false);
       })
       .catch(error => {
-        console.error('Failed to fetch courses:', error);
+        console.error('Failed to fetch courses - ', error);
         setLoading(false);
       });
   }, []);
 
-  if (loading) return <p>Loading courses...</p>;
+  if (loading) return <p style={{alignContent:'center'}}>Loading courses...</p>;
 
-  return (
-    <div>
+return (
+  <div>
+    {courses && courses.length > 0 ? (
+    <>
       <h2>Course List</h2>
       <table className="bp4-html-table bp4-html-table-bordered bp4-html-table-striped bp4-html-table-truncated">
         <thead>
@@ -41,12 +43,16 @@ export function FullCourseList() {
               <td>{index + 1}</td>
               <td>{course.coursecode}</td>
               <td>{course.coursename}</td>
-              <td>{course.date ? course.date : "    "}</td>
-              <td>{course.session ? course.session : "    "}</td>
+              <td>{course.date || "—"}</td>
+              <td>{course.session || "—"}</td>
             </tr>
           ))}
         </tbody>
       </table>
-    </div>
-  );
+    </>
+    ) : (
+      <h1>No Courses Added</h1>
+    )}
+  </div>
+);
 }
