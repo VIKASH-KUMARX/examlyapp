@@ -17,17 +17,17 @@ export function AdminLoginDB() {
   };
 
   return (
-    <div>
+    <div className='year-container'>
       <div>
         <ViewLoginDBComponent API={API} refresh={refresh} />
       </div>
-      <div style={{ display: 'flex', justifyContent:'center', gap: '10px', marginTop: '20px' }}>
-        <Button intent="success" onClick={() => handleClick('add')}>Add</Button>
-        <Button intent="primary" onClick={() => handleClick('update')}>Update</Button>
-        <Button intent="danger" onClick={() => handleClick('delete')}>Delete</Button>
+      <div className='crud-btn-group'>
+        <button className='btn btn-success' onClick={() => handleClick('add')}>Add</button>
+        <button className='btn btn-primary' onClick={() => handleClick('update')}>Update</button>
+        <button className='btn btn-danger' onClick={() => handleClick('delete')}>Delete</button>
       </div>
       
-      <div style={{ marginTop: '20px' }}>
+      <div className='component-container'>
         {visibleComponent === 'add' && <AddAdminLoginComponent API={API} setRefresh={setRefresh}/>}
         {visibleComponent === 'update' && <UpdateAdminLoginComponent API={API} setRefresh={setRefresh}/>}
         {visibleComponent === 'delete' && <DeleteAdminLoginComponent API={API} setRefresh={setRefresh}/>}

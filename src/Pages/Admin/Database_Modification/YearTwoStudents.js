@@ -9,7 +9,7 @@ import { DeleteAllStudentComponent } from '../../../Components/Database_Modifica
 export function YearTwoStudents() {
   const API = "api/yeartwostudent";
 
-  const [visibleComponent, setVisibleComponent] = useState(null);
+  const [visibleComponent, setVisibleComponent] = useState('add');
   const [refresh, setRefresh] = useState(true);
   const [dataLength, setDataLength] = useState(0);
 
@@ -18,20 +18,20 @@ export function YearTwoStudents() {
   };
 
   return (
-    <div>
+    <div className='year-container'>
       <div>
         <ViewStudentsComponent API={API} refresh={refresh} setDataLength={setDataLength}/>
       </div>
 
     {dataLength>0 &&
-      (<><div style={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '30px', marginBottom: '50px' }}>
-        <Button style={{width: '100%' }} intent="success" onClick={() => handleClick('add')}>Add</Button>
-        <Button style={{width: '100%' }} intent="primary" onClick={() => handleClick('update')}>Update</Button>
-        <Button style={{width: '100%' }} intent="danger" onClick={() => handleClick('delete')}>Delete</Button>
-        <Button style={{width: '100%' }} intent="danger" onClick={() => handleClick('deleteAll')}>Delete All</Button>
+      (<><div className='crud-btn-group'>
+        <button className='btn btn-success' onClick={() => handleClick('add')}>Add</button>
+        <buton className='btn btn-primary' onClick={() => handleClick('update')}>Update</buton>
+        <button className='btn btn-danger' onClick={() => handleClick('delete')}>Delete</button>
+        <button className='btn btn-danger' onClick={() => handleClick('deleteAll')}>Delete All</button>
       </div>
 
-      <div style={{ paddingBottom: '20px' }}>
+      <div className='component-container'>
         {visibleComponent === 'add' && <AddStudentComponent API={API} setRefresh={setRefresh}/>}
         {visibleComponent === 'update' && <UpdateStudentComponent API={API} setRefresh={setRefresh}/>}
         {visibleComponent === 'delete' && <DeleteStudentComponent API={API} setRefresh={setRefresh}/>}

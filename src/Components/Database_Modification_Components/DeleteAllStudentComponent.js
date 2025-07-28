@@ -25,13 +25,13 @@ export function DeleteAllStudentComponent({ API ,setRefresh }) {
   };
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '20px' }}>
+    <div className='crud-container'>
         <p style={{ marginBottom: '20px',fontWeight: 'bold' }}>
             Once confirmed, all student data will be permanently deleted and cannot be recovered.
         </p>
-        <Button intent="danger" onClick={deleteStudent}>
+        <button className='btn btn-danger' onClick={deleteStudent}>
             Confirm Delete
-        </Button>
+        </button>
     </div>
 
   );

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Toaster, Position } from '@blueprintjs/core';
+import Styles from '../Styles/Admin/DatabaseInitialization.module.css'
 
 const AppToaster = Toaster.create({ position: Position.TOP });
 
@@ -55,20 +56,22 @@ export function DatabaseInitialization() {
   };
 
   return (
-    <div style={{ maxWidth: 500, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-      <h2>Upload Excel Files</h2>
+    <div className={Styles.uploadContainer}>
+      <h2 className='title'>Upload Excel Files</h2>
       {endpoints.map((endpoint, index) => (
-        <div key={index} style={{ marginBottom: "1.5rem" }}>
-          <label><strong>{endpoint.year}</strong></label>
-          <input
-            type="file"
-            accept=".xls,.xlsx"
-            onChange={(e) => handleFileChange(e, index)}
-            style={{ display: "block", margin: "0.5rem 0" }}
-          />
-          <Button intent="primary" onClick={() => handleUpload(index)}>
+        <div key={index} className={Styles.uploadSection}>
+          <div className='label-input'>
+            <label className='label'><strong>{endpoint.year}</strong></label>
+            <input
+              type="file"
+              accept=".xls,.xlsx"
+              onChange={(e) => handleFileChange(e, index)}
+              className='input'
+            />
+          </div>
+          <button className='btn btn-primary' onClick={() => handleUpload(index)}>
             Upload
-          </Button>
+          </button>
         </div>
       ))}
     </div>

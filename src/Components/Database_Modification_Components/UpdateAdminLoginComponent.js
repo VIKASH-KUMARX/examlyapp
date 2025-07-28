@@ -72,10 +72,10 @@ export function UpdateAdminLoginComponent({ API ,setRefresh}) {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', marginTop: '30px' }}>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <label style={{width: '80px'}}>Username :</label>
-        <InputGroup
+    <div className='crud-container'>
+      <div className='label-input'>
+        <label className='label'>Username :</label>
+        <input className='input'
           value={usernameInput}
           placeholder='Enter username'
           onChange={(e) => setUsernameInput(e.target.value)}
@@ -85,36 +85,34 @@ export function UpdateAdminLoginComponent({ API ,setRefresh}) {
 
       {!adminData && (
         <div>
-          <Button intent="primary" onClick={fetchAdminLogin}>
+          <button className='btn btn-primary' onClick={fetchAdminLogin}>
             Search Admin
-          </Button>
+          </button>
         </div>
       )}
 
       {adminData && (
         <>
-          <div style={{ display: 'flex', flexDirection:'column', justifyContent: 'center', alignItems: 'center', gap:'12px'  }}>
-            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-              <label style={{width: '80px'}}>Password :</label>
-              <InputGroup
-                value={adminData.password}
-                onChange={(e) => setAdminData({ ...adminData, password: e.target.value })}
-              />
-            </div>
-            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-              <label style={{width: '80px'}}>Comfirm :</label>
-              <InputGroup
-                value={comfirmPassword}
-                onChange={(e) => setComfirmPassword(e.target.value)}
-                placeholder='Comfirm Password'
-              />
-            </div>
+          <div className='label-input'>
+            <label className='label'>Password :</label>
+            <input className='input'
+              value={adminData.password}
+              onChange={(e) => setAdminData({ ...adminData, password: e.target.value })}
+            />
+          </div>
+          <div className='label-input'>
+            <label className='label'>Comfirm :</label>
+            <input className='input'
+              value={comfirmPassword}
+              onChange={(e) => setComfirmPassword(e.target.value)}
+              placeholder='Comfirm Password'
+            />
           </div>
 
-          <div style={{ textAlign: 'center' }}>
-            <Button intent="success" onClick={updateAdminLogin}>
+          <div>
+            <button className='btn btn-success' onClick={updateAdminLogin}>
               Update Admin
-            </Button>
+            </button>
           </div>
         </>
       )}

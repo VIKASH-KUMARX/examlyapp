@@ -23,11 +23,11 @@ export function FullCourseList() {
   if (loading) return <p style={{alignContent:'center'}}>Loading courses...</p>;
 
 return (
-  <div>
+  <div className='table-container'>
     {courses && courses.length > 0 ? (
     <>
-      <h2>Course List</h2>
-      <table className="bp4-html-table bp4-html-table-bordered bp4-html-table-striped bp4-html-table-truncated">
+      <h2 className='title'>Course List</h2>
+      <table className='table'>
         <thead>
           <tr>
             <th>S.No</th>
@@ -51,7 +51,7 @@ return (
       </table>
     </>
     ) : (
-      <h1>No Courses Added</h1>
+      <h1 className='no-data-available'>No Courses Added</h1>
     )}
   </div>
 );

@@ -72,51 +72,48 @@ export function UpdateStudentComponent({ API ,setRefresh}) {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', marginTop: '30px' }}>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <label style={{width: '80px'}}>Regnum :</label>
-        <InputGroup
+    <div className='crud-container'>
+      <div className='label-input'>
+        <label className='label'>Regnum :</label>
+        <input className='input'
           value={regnumInput}
           onChange={(e) => setRegnumInput(e.target.value)}
           placeholder="Enter Registration Number"
           disabled={!!studentData}
-          style={{ width: '300px' }}
         />
       </div>
 
       {!studentData && (
         <div>
-          <Button intent="primary" onClick={fetchStudent}>
+          <button className='btn btn-primary' onClick={fetchStudent}>
             Search Student
-          </Button>
+          </button>
         </div>
       )}
 
       {studentData && (
         <>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <label style={{width: '80px'}}>Name :</label>
-            <InputGroup
+          <div className='label-input'>
+            <label className='label'>Name :</label>
+            <input className='input'
               value={studentData.name}
               onChange={(e) => setStudentData({ ...studentData, name: e.target.value })}
               placeholder="Enter Name"
-              style={{ width: '300px' }}
             />
           </div>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <label style={{width: '80px'}}>Courses :</label>
-            <InputGroup
+          <div className='label-input'>
+            <label className='label'>Courses :</label>
+            <input className='input'
               value={studentData.courses}
               onChange={(e) => setStudentData({ ...studentData, courses: e.target.value })}
               placeholder="Add Courses"
-              style={{ width: '300px' }}
             />
           </div>
 
           <div>
-            <Button intent="success" onClick={updateStudent}>
+            <button className='btn btn-success' onClick={updateStudent}>
               Update Student
-            </Button>
+            </button>
           </div>
         </>
       )}

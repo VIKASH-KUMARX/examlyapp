@@ -51,10 +51,10 @@ export function DeleteAdminLoginComponent({ API ,setRefresh}) {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', marginTop: '30px' }}>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <label style={{ width: '80px' }}>Username :</label>
-        <InputGroup
+    <div className='crud-container'>
+      <div className='label-input'>
+        <label className='label'>Username :</label>
+        <input className='input'
           value={usernameInput}
           onChange={(e) => setUsernameInput(e.target.value)}
           placeholder="Enter username"
@@ -64,23 +64,23 @@ export function DeleteAdminLoginComponent({ API ,setRefresh}) {
 
       {!adminLoginData && (
         <div>
-          <Button intent="danger" onClick={fetchAdminLogin}>
+          <button className='btn btn-danger' onClick={fetchAdminLogin}>
             Search Admin
-          </Button>
+          </button>
         </div>
       )}
 
       {adminLoginData && (
         <>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <label style={{ width: '80px' }}>Password :</label>
-            <InputGroup value={adminLoginData.password} disabled />
+          <div className='label-input'>
+            <label className='label'>Password :</label>
+            <input className='input' value={adminLoginData.password} disabled />
           </div>
 
           <div>
-            <Button intent="danger" onClick={deleteAdminLogin}>
+            <button className='btn btn-danger' onClick={deleteAdminLogin}>
               Confirm Delete
-            </Button>
+            </button>
           </div>
         </>
       )}

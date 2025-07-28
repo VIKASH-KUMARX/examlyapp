@@ -3,6 +3,7 @@ import { Button, Position, Toaster } from "@blueprintjs/core";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { RoomDetails } from './RoomDetails';
+import Styles from "../../Styles/Admin/HallSeatingAllocation.module.css"
 
 const AppToaster = Toaster.create({ position: Position.TOP });
 
@@ -116,11 +117,10 @@ export function HallSeatingAllocation() {
   }
   
   return (
-    <div style={{ padding: 24 }}>
-      <h2>Hall Seating Allocation</h2>
+    <div className={Styles.hallAllocationContainer}>
+      <h2 className='title'>Hall Seating Allocation</h2>
 
-      {/* Year selection */}
-      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 20 }}>
+      <div className={Styles.yearButtons}>
         {yearOptions.map(year => {
           const isDisabled = disabledYears.includes(year);
           const isSelected = selectedYears.includes(year);
@@ -135,14 +135,7 @@ export function HallSeatingAllocation() {
                   setSelectedYears(prev => prev.length < 2 ? [...prev, year] : [prev[0], year]);
                 }
               }}
-              style={{
-                padding: '6px 12px',
-                borderRadius: 20,
-                border: '1px solid #ccc',
-                backgroundColor: isSelected ? '#106ba3' : isDisabled ? '#eee' : '#fff',
-                color: isSelected ? '#fff' : isDisabled ? '#888' : '#000',
-                cursor: isDisabled ? 'not-allowed' : 'pointer'
-              }}
+              className={`${Styles.yearButton} ${isSelected ? Styles.selected : ''} ${isDisabled ? Styles.disabled : ''}`}
             >
               {year}
             </button>
@@ -150,36 +143,42 @@ export function HallSeatingAllocation() {
         })}
       </div>
 
-      {/* Inputs */}
-      <div style={{ display: 'flex', gap: 20, marginBottom: 20 }}>
-        <div>
-          <label>Available Rooms</label><br />
-          <input value={roomInput} onChange={e => setRoomInput(e.target.value)} 
-            placeholder="eg : A301, A302" />
+      <div className={Styles.inputRow}>
+        <div className='label-input'>
+          <label className='label'>Available Rooms</label>
+          <input className='input' value={roomInput} onChange={e => setRoomInput(e.target.value)} placeholder="eg : A301, A302 ..." />
         </div>
-        <div>
-          <label>Availabe Benches<span style={{fontSize:'10px'}}>(max 34)</span></label><br />
-          <input type="number" value={capacity} onChange={e => {const val = e.target.value;
-              if(/^\d*$/.test(val)) setCapacity(e.target.value);}}
-            placeholder="eg : 30" min="1" step="1"
-            style={{ width: 80 }} 
+        <div className='label-input'>
+          <label className='label'>
+            Availabe Benches
+          </label>
+          <input
+            className='input'
+            type="number"
+            value={capacity}
+            onChange={e => {
+              const val = e.target.value;
+              if (/^\d*$/.test(val)) setCapacity(val);
+            }}
+            placeholder="Max 30 - Min 34"
+            min="1"
+            step="1"
           />
         </div>
       </div>
 
-      <Button intent="primary" onClick={handleAllocate}>Allocate Seat</Button>
+      <button className='btn btn-primary' onClick={handleAllocate}>Allocate Seat</button>
 
-      {/* History */}
-      <h3 style={{ marginTop: 30 }}>Allocation History</h3>
+      <h3 className='sub-title'>allocation history</h3>
       {history.length === 0 ? (
-        <p>No allocations yet.</p>
+        <p className='no-data-available'>No allocations yet.</p>
       ) : (
         <>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <table className={Styles.table}>
             <thead>
               <tr>
                 {["Years", "Rooms", "Capacity", "Timestamp"].map(h => (
-                  <th key={h} style={{ border: '1px solid #ccc', padding: 6, background: '#f5f8fa' }}>{h}</th>
+                  <th key={h}>{h}</th>
                 ))}
               </tr>
             </thead>
@@ -187,29 +186,26 @@ export function HallSeatingAllocation() {
               {history.map((h, i) => (
                 <tr key={i}>
                   {["years", "roomno", "capacity", "timestamp"].map(k => (
-                    <td key={k} style={{ border: '1px solid #ccc', padding: 6 }}>{h[k]}</td>
+                    <td key={k}>{h[k]}</td>
                   ))}
                 </tr>
               ))}
             </tbody>
           </table>
-          <Button intent="danger" onClick={handleResetAll} style={{ marginTop: 15 }}>
-            Reset All
-          </Button>
         </>
       )}
 
-      {/* Year-specific reset */}
-      <div style={{ display: 'flex', gap: 20, marginTop: 30 }}>
-        {["One", "Two", "Three", "Four"].map(y => (
-          <Button key={y} intent="warning" onClick={() => resetYear(y)}>
+      <div className={Styles.resetButtons}>
+        <button className='btn btn-danger' onClick={handleResetAll}>Reset All</button>
+        {/* {["One", "Two", "Three", "Four"].map(y => (
+          <button key={y} className='btn btn-warning' onClick={() => resetYear(y)}>
             Reset Year {y}
-          </Button>
-        ))}
+          </button>
+        ))} */}
       </div>
-      <div>
-          {/* <RoomDetails refresh={history}/> */}
-          <Button intent='primary' onClick={handleNavigate}> View Allocation </Button>
+
+      <div style={{ textAlign: 'start' }}>
+        <button className={Styles.viewRooms} onClick={handleNavigate}>View Allocation</button>
       </div>
     </div>
   );

@@ -21,9 +21,10 @@ export function ViewLoginDBComponent({API, refresh}) {
   if (loading) return <p style={{alignContent:'center'}}>Loading courses...</p>;
 
   return (
-    <div className="App" style={{ display:'flex',justifyContent:'center' }}>
+    <div className='table-container'>
+      <h2 className='title'> Student Logins </h2>
     { student && student.length>0 ?
-    (<table className="bp4-html-table bp4-html-table-bordered bp4-html-table-striped bp4-html-table-truncated">
+    (<table className='table'>
         <thead>
           <tr>
             <th>S.No</th>
@@ -42,7 +43,7 @@ export function ViewLoginDBComponent({API, refresh}) {
         </tbody> 
       </table>)
     :
-    <h1>No login Datas</h1>}
+    <h2 className='no-data-available'>No login Datas</h2>}
     </div>
   );
 }

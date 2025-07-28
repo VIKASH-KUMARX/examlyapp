@@ -23,9 +23,15 @@ export function ViewStudentsComponent({API, refresh, setDataLength}) {
   if (loading) return <p style={{alignContent:'center'}}>Loading courses...</p>;
 
   return (
-    <div className="App">
+    <div className="table-container">
+      <h2 className="title">
+        {API.includes("yearone") && "First Year Students"}
+        {API.includes("yeartwo") && "Secont Year Students"}
+        {API.includes("yearthree") && "Third Year Students"}
+        {API.includes("yearfour") && "Final Year Students"}
+      </h2>
     {  student && student.length>0 ?
-      (<table className="bp4-html-table bp4-html-table-bordered bp4-html-table-striped bp4-html-table-truncated">
+      (<table className="table">
         <thead>
           <tr>
             <th>S.No</th>
@@ -67,7 +73,7 @@ export function ViewStudentsComponent({API, refresh, setDataLength}) {
             </tr>
           ))}
         </tbody> 
-      </table>) : <span style={{fontWeight:'bold', fontSize:'40px'}}> No Students Data </span>
+      </table>) : <span className='no-data-available'> No Students Data </span>
     }
     </div>
   );

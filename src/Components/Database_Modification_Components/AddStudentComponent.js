@@ -115,36 +115,28 @@ export function AddStudentComponent({ API , setRefresh}) {
   }
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '15px',
-        marginTop: '30px',
-      }}
-    >
-      <InputGroup
+    <div className='crud-container'>
+      <input className='input'
         value={newRegNo}
         onChange={(e) => setRegNo(e.target.value)}
         placeholder="Enter new Reg_no"
         style={{ width: '300px' }}
       />
-      <InputGroup
+      <input className='input'
         value={newName}
         onChange={(e) => setNewName(e.target.value)}
         placeholder="Enter new Name"
         style={{ width: '300px' }}
       />
-      <InputGroup
+      <input className='input'
         value={newCourses}
         onChange={(e) => setNewCourses(e.target.value)}
         placeholder="Add courses (comma separated)"
         style={{ width: '300px' }}
       />
-      <Button intent="success" onClick={addStudent}>
+      <button className='btn btn-success' onClick={addStudent}>
         Add Student
-      </Button>
+      </button>
     </div>
   );
 }

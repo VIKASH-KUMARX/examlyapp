@@ -96,25 +96,25 @@ export function AddAdminLoginComponent({API, setRefresh}) {
     
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', marginTop: '30px' }}>
-      <InputGroup
+      <div className='crud-container'>
+      <input className='input'
         value={newUsername}
         onChange={(e) => setNewUsername(e.target.value)}
         placeholder="Enter new username"
       />
-      <InputGroup
+      <input className='input'
         value={newPassword}
         onChange={(e) => setNewPassword(e.target.value)}
         placeholder="Enter new password"
       />
-      <InputGroup
+      <input className='input'
         value={comfirmPassword}
         onChange={(e)=> setComfirmPassword(e.target.value)}
         placeholder='Comfirm Password'
       />
-      <Button intent="success" onClick={addAdminLogin}>
+      <button className='btn btn-success' onClick={addAdminLogin}>
         Add Admin
-      </Button>
+      </button>
     </div>    
     );
 }

@@ -51,37 +51,36 @@ export function DeleteStudentComponent({ API ,setRefresh }) {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', marginTop: '30px' }}>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <label style={{ width: '80px' }}>Regnum :</label>
-        <InputGroup
+    <div className='crud-container'>
+      <div className='label-input'>
+        <label className='label'>Regnum :</label>
+        <input className='input'
           value={regnumInput}
           onChange={(e) => setRegnumInput(e.target.value)}
           placeholder="Enter Registration Number"
-          style={{width:'300px'}}
           disabled={!!studentData}
         />
       </div>
 
       {!studentData && (
         <div>
-          <Button intent="danger" onClick={fetchStudent}>
+          <button className='btn btn-danger' onClick={fetchStudent}>
             Search Student
-          </Button>
+          </button>
         </div>
       )}
 
       {studentData && (
         <>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <label style={{ width: '80px' }}>Name :</label>
-            <InputGroup value={studentData.name} style={{width:'300px'}}  disabled />
+          <div className='label-input'>
+            <label className='label'>Name :</label>
+            <input className='input' value={studentData.name}  disabled />
           </div>
 
           <div>
-            <Button intent="danger" onClick={deleteStudent}>
+            <button className='btn btn-danger' onClick={deleteStudent}>
               Confirm Delete
-            </Button>
+            </button>
           </div>
         </>
       )}
