@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from "react-router-dom";
-import { H1, H4 } from '@blueprintjs/core';
+import Styles from "../Styles/Student/StudentMain.module.css";
 
 export function StudentMain() {
 
@@ -19,8 +19,8 @@ export function StudentMain() {
       .catch((error) => console.error("Error in student data Fetch! - ", error));
   }, [API]);
   
-  const Year = String(studentData.regnum || "").substring(4, 6);
-  const Batch = `20${Year} - 20${parseInt(Year) + 4}`;
+  const studentYear = String(studentData.regnum || "").substring(4, 6);
+  const Batch = `20${studentYear} - 20${parseInt(studentYear) + 4}`;
 
   useEffect(() => {
     fetch("/api/course")
@@ -29,120 +29,119 @@ export function StudentMain() {
       .catch((error) => console.error("Error in courses Fetch! - ", error));
   }, []);  
 
-  // useEffect(() => {
-  //   if (studentData.courses && examData.length > 0) {
-  //     const studentCourses = Array.isArray(studentData.courses)
-  //       ? studentData.courses
-  //       : JSON.parse(studentData.courses);
-
-  //     const orderedFiltered = studentCourses.map((code) => 
-  //       examData.find((exam) => 
-  //         exam.coursecode === code ))
-  //           .filter(Boolean); // remove undefined if any course code doesn't match
-
-  //     setFilteredExamData(orderedFiltered);
-  //   }
-  // }, [studentData, examData]);
-
   useEffect(() => {
-  if (studentData.courses && examData.length > 0) {
-    const studentCourses = Array.isArray(studentData.courses)
-      ? studentData.courses
-      : studentData.courses.split(',');
+    if (studentData.courses && examData.length > 0) {
+      const studentCourses = Array.isArray(studentData.courses)
+        ? studentData.courses
+        : studentData.courses.split(',');
 
-    const filtered = examData.filter(exam =>
-      studentCourses.includes(exam.coursecode)
-    );
+      const filtered = examData.filter(exam =>
+        studentCourses.includes(exam.coursecode)
+      );
 
-    const sorted = filtered.sort((a, b) => {
-      const dateA = new Date(a.date);
-      const dateB = new Date(b.date);
-      if (dateA - dateB !== 0) return dateA - dateB;
-      return a.session === 'FN'
-        ? -1
-        : 1;
-    });
+      const sorted = filtered.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        if (dateA - dateB !== 0) return dateA - dateB;
+        return a.session === 'FN' ? -1 : 1;
+      });
 
-    setFilteredExamData(sorted);
-  }
-}, [studentData, examData]);
+      setFilteredExamData(sorted);
+    }
+  }, [studentData, examData]);
+
+  function getDateTimeDiff(d1, d2) {
+  let diffMs = Math.abs(d1 - d2) + (2 * 60 * 1000);
+
+  const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  diffMs -= days * (1000 * 60 * 60 * 24);
+
+  const hours = Math.floor(diffMs / (1000 * 60 * 60));
+  diffMs -= hours * (1000 * 60 * 60);
+
+  const minutes = Math.floor((diffMs) / (1000 * 60));
+  diffMs -= minutes * (1000 * 60);
+
+  return days + "day " + hours + ":" + minutes;
+}
 
   return (
-    <div style={{ fontFamily: 'sans-serif', padding: '30px', color: '#111' }}>
+    <div className={Styles.container}>
       
-      <h2 style={{ marginBottom: '20px' }}>Dashboard</h2>
+      <h2 className={Styles.title}>Dashboard</h2>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '40px' }}>
-        <div style={{
-          width: '100px',
-          height: '100px',
-          borderRadius: '50%',
-          border: '2px solid #000',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '50px'
-        }}>
-        <span>👤</span>
+      <div className={Styles.profileContainer}>
+        <div className={Styles.profilePic}>
+          <span>👤</span>
         </div>
-        <div>
-          <H1 style={{ margin: 0 }}>Hey {studentData.name && studentData.name.toUpperCase()}</H1>
+        <div className={Styles.profileDetails}>
+          <h1>Hey {studentData.name && studentData.name.toUpperCase()}</h1>
 
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '10px' }}>
-            <H4 style={{ margin: 0 }}>Register number :</H4>
-            <p style={{
-              backgroundColor: '#e0e0e0',
-              padding: '5px 10px',
-              borderRadius: '5px',
-              margin: 0
-            }}>{studentData.regnum}</p>
+          <div className={Styles.detailRow}>
+            <h4>Register number:</h4>
+            <p className={Styles.detailValue}>{studentData.regnum}</p>
 
-            <H4 style={{ margin: '0 0 0 20px' }}>Degree :</H4>
-            <p style={{
-              backgroundColor: '#e0e0e0',
-              padding: '5px 10px',
-              borderRadius: '5px',
-              margin: 0
-            }}>BE-ECE</p>
+            <h4>Degree:</h4>
+            <p className={Styles.detailValue}>BE-ECE</p>
 
-            <H4 style={{ margin: '0 0 0 20px' }}>Batch :</H4>
-            <p style={{
-              backgroundColor: '#e0e0e0',
-              padding: '5px 10px',
-              borderRadius: '5px',
-              margin: 0
-            }}>{Batch}</p>
+            <h4>Batch:</h4>
+            <p className={Styles.detailValue}>{Batch}</p>
           </div>
         </div>
       </div>
 
-      <div style={{ marginTop: '40px' }}>
-        <h2 style={{ marginBottom: '40px' }}>Seating Allotment</h2>
-          <div style={{display : 'flex' ,marginBottom:'30px',gap:'10px'}}>
-            <H4 style={{ width: '50px', margin: 0 }}>S.No</H4>
-            <H4 style={{ width: '150px', margin: 0 }}>Course Code</H4>
-            <H4 style={{ width: '250px', margin: 0 }}>Course Title</H4>
-            <H4 style={{ width: '150px', margin: 0 }}>Exam Date</H4>
-            <H4 style={{ width: '100px', margin: 0 }}>Session</H4>
-            <H4 style={{ width: '150px', margin: 0 }}>Hall Number</H4>
-          </div>
-          <div>
-            {filteredExamData.map((data, index) => {
-              const roomList = studentData.roomno ? studentData.roomno.split(',').map(r => r.trim()) : [];
-              const currentRoom = roomList[index] || "Not Allocated";
+      <div className={Styles.section}>
+        <h2 className={Styles.sectionTitle}>Seating Allotment</h2>
+        <div className={Styles.tableHeader}>
+          <h4>S.No</h4>
+          <h4>Course Code</h4>
+          <h4>Course Title</h4>
+          <h4>Exam Date</h4>
+          <h4>Session</h4>
+          <h4>Hall Number</h4>
+        </div>
 
-              return (
-                <div key={index} style={{ display: 'flex', marginBottom: '20px', gap: '10px' }}>
-                  <p style={{ width: '50px', margin: 0 }}>{index + 1}</p>
-                  <p style={{ width: '150px', margin: 0 }}>{data.coursecode}</p>
-                  <p style={{ width: '250px', margin: 0 }}>{data.coursename}</p>
-                  <p style={{ width: '150px', margin: 0 }}>{data.date}</p>
-                  <p style={{ width: '100px', margin: 0 }}>{data.session}</p>
-                  <p style={{ width: '100px', margin: 0 }}>{currentRoom}</p>
-                </div>
-              );
-            })}
-          </div>
+        <div>
+          {filteredExamData.map((data, index) => {
+            const roomList = studentData.roomno ? studentData.roomno.split(',').map(r => r.trim()) : [];
+            const currentRoom = roomList[index] || "Not Allocated";
+
+            const examData = new Date(data.date);
+            const now = new Date();
+
+            let releaseTime = new Date(examData);
+            if(data.session === 'FN') {
+              releaseTime.setHours(8, 0, 0, 0);
+            } else {
+              releaseTime.setHours(12, 30, 0, 0);
+            }
+
+            let displayRoom;
+            // const pad = (n) => (n < 10 ? "0" + n : n);
+            // const formatted =
+            //   "Check after: " +
+            //   pad(releaseTime.getDate()) + "-" +
+            //   pad(releaseTime.getMonth() + 1) + "/" +
+            //   pad(releaseTime.getHours()) + ":" +
+            //   pad(releaseTime.getMinutes());
+            if (releaseTime < now) {
+              displayRoom = currentRoom;
+            } else {
+              displayRoom = "Wait " + getDateTimeDiff(now, releaseTime);
+            }
+
+            return (
+              <div key={index} className={Styles.tableRow}>
+                <p>{index + 1}</p>
+                <p>{data.coursecode}</p>
+                <p>{data.coursename}</p>
+                <p>{data.date}</p>
+                <p>{data.session}</p>
+                <p>{displayRoom}</p>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

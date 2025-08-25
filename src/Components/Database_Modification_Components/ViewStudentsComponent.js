@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Loader from '../loader';
 
 export function ViewStudentsComponent({API, refresh, setDataLength}) {
 
@@ -20,7 +21,7 @@ export function ViewStudentsComponent({API, refresh, setDataLength}) {
       })
   }, [API,refresh]);
 
-  if (loading) return <p style={{alignContent:'center'}}>Loading courses...</p>;
+  if (loading) return <Loader />;
 
   return (
     <div className="table-container">

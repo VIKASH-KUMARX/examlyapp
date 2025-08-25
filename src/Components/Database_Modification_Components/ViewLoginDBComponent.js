@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Loader from '../loader';
 
 export function ViewLoginDBComponent({API, refresh}) {
 
@@ -18,7 +19,7 @@ export function ViewLoginDBComponent({API, refresh}) {
       });
   }, [API,refresh]);
 
-  if (loading) return <p style={{alignContent:'center'}}>Loading courses...</p>;
+  if (loading) return <Loader />;
 
   return (
     <div className='table-container'>

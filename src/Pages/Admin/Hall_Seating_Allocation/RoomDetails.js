@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import Styles from '../../Styles/Admin/RoomDetails.module.css';
 
 export function RoomDetails() {
@@ -11,7 +11,7 @@ export function RoomDetails() {
   const printRef = useRef();
 
   useEffect(() => {
-    axios('/api/room/getAllRooms')
+    axios('/api/room/getAll')
       .then((res) => {
         setRoomDatas(res.data);
       })

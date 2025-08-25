@@ -1,0 +1,99 @@
+.wrap {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #fff;
+  color: #111;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.card {
+  width: min(720px, 92vw);
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  border-radius: 16px;
+  padding: 32px 28px;
+  text-align: center;
+}
+
+.sketch {
+  width: 240px;
+  height: auto;
+  color: #111; /* stroke color */
+  margin: 8px auto 18px;
+  display: block;
+}
+
+.title {
+  font-size: clamp(22px, 2.4vw, 28px);
+  line-height: 1.15;
+  margin: 6px 0 8px;
+  letter-spacing: -0.01em;
+}
+
+.subtitle {
+  font-size: clamp(14px, 1.6vw, 16px);
+  color: #444;
+  margin: 0 0 20px;
+}
+
+.actions {
+  display: inline-flex;
+  gap: 12px;
+  margin: 6px 0 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  appearance: none;
+  border: 1px solid #111;
+  background: #fff;
+  color: #111;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: none !important;
+  transition: transform 0.06s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.primary {
+  background: #111;
+  color: #fff !important;
+}
+
+.hint {
+  display: inline-block;
+  margin-left: 8px;
+  margin-top: 8px;
+  padding: 6px 10px;
+  background: #f6f6f6;
+  border: 1px dashed #000000;
+  border-radius: 8px;
+  color: #333;
+  font-size: 12px;
+}
+
+/* @media (prefers-color-scheme: dark) {
+  .wrap { background: #0b0b0b; color: #f5f5f5; }
+  .card { background: #111; border-color: #222; box-shadow: 0 12px 30px rgba(0,0,0,0.5); }
+  .sketch { color: #f5f5f5; }
+  .subtitle { color: #cfcfcf; }
+  .btn { border-color: #eaeaea; color: #f5f5f5; background: transparent; }
+  .primary { background: #f5f5f5; color: #111; }
+  .hint { background: #151515; border-color: #2a2a2a; color: #ddd; }
+} */

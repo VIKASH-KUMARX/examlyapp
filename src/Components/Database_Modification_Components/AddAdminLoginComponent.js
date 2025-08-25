@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, InputGroup, Position, Toaster} from '@blueprintjs/core';
+import { Position, Toaster} from '@blueprintjs/core';
 
 const AppToaster = Toaster.create({
   position: Position.TOP,
@@ -10,18 +10,21 @@ export function AddAdminLoginComponent({API, setRefresh}) {
     const [newUsername, setNewUsername] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [comfirmPassword, setComfirmPassword] = useState('');
+    const [btnLoading, setBtnLoading] = useState(false);
 
     function addAdminLogin() 
     {
+      setBtnLoading(true);
       const username = newUsername.trim();
 
       if(username.length === 0) {
         AppToaster.show({
-          message: 'Username cannot be only spaces!',
+          message: 'Username cannot be only space!',
           intent: 'warning',
           timeout: 2000,
         });
         setNewUsername('');
+        setBtnLoading(false);
         return;
       }
 
@@ -31,6 +34,7 @@ export function AddAdminLoginComponent({API, setRefresh}) {
           intent: 'warning',
           timeout: 3000,
         });
+        setBtnLoading(false);
         return;
       }
 
@@ -40,6 +44,7 @@ export function AddAdminLoginComponent({API, setRefresh}) {
           intent: 'warning',
           timeout: 2000,
         });
+        setBtnLoading(false);
         return;
       }
     
@@ -60,6 +65,7 @@ export function AddAdminLoginComponent({API, setRefresh}) {
           } else {
             console.error("error in adminLogin Fetch? - ",err);
           }
+          setBtnLoading(false);
         }
       );
     }
@@ -91,6 +97,8 @@ export function AddAdminLoginComponent({API, setRefresh}) {
           timeout: 2000,
         });
         console.error("error in adding new admin : ",err.message || err);
+      }finally{
+        setBtnLoading(false);
       }
     }
     
@@ -112,8 +120,8 @@ export function AddAdminLoginComponent({API, setRefresh}) {
         onChange={(e)=> setComfirmPassword(e.target.value)}
         placeholder='Comfirm Password'
       />
-      <button className='btn btn-success' onClick={addAdminLogin}>
-        Add Admin
+      <button className='btn btn-success' onClick={addAdminLogin} disabled={btnLoading}>
+        {btnLoading ? <span className="button-spinner"></span> : 'Add Admin'}
       </button>
     </div>    
     );

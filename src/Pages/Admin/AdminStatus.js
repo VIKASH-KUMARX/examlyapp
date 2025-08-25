@@ -4,13 +4,13 @@ import { AuthContext } from "../../Components/Authentication/Auth";
 
 
 export function AdminStatus() {
-  const {login, setLogin} = useContext(AuthContext);
+  const {setLogin} = useContext(AuthContext);
   const handleLogout=()=>{
     setLogin(false);
   }
     return (
       <div>
-        <button onClick={handleLogout}> Logout </button>
+        <button className="btn btn-danger" onClick={handleLogout}> Logout </button>
       </div>
     );
   }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, Position, Toaster } from "@blueprintjs/core";
+import { Position, Toaster } from "@blueprintjs/core";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { RoomDetails } from './RoomDetails';
@@ -15,6 +15,7 @@ export function HallSeatingAllocation() {
   const [history, setHistory] = useState([]);
   const [roomAllocationData, setRoomAllocationData] = useState([]);
   const navigate = useNavigate();
+  const [btnLoading, setBtnLoading] = useState(false);
 
   const yearOptions = ["year 1", "year 2", "year 3", "year 4"];
   const yearApiMap = {
@@ -30,13 +31,26 @@ export function HallSeatingAllocation() {
   }, []);
 
   const handleAllocate = async () => {
+    setBtnLoading(true);
     const rooms = roomInput.split(',').map(r => r.trim()).filter(Boolean);
     const payload = { roomlist: rooms, roomsize: parseInt(capacity, 10) };
 
-    if (!selectedYears.length) return AppToaster.show({ message: 'Select at least any one year students!', intent: 'warning', timeout: 2000 });
-    if (!rooms.length ) return AppToaster.show({ message: 'Please Enter Available Rooms!', intent: 'warning', timeout: 2000 });
-    if (!capacity) return AppToaster.show({ message: 'Please Enter Availabe Benches!', intent: 'warning', timeout: 2000 });
-    if (!(capacity>0 && capacity<=34)) return AppToaster.show({ message: 'Maximum Room Capacity is 34!', intent: 'danger', timeout: 2000 });
+    if (!selectedYears.length) {
+      setBtnLoading(false);
+      return AppToaster.show({ message: 'Select at least any one year students!', intent: 'warning', timeout: 2000 });
+    }
+    if (!rooms.length ) {
+      setBtnLoading(false);
+      return AppToaster.show({ message: 'Please Enter Available Rooms!', intent: 'warning', timeout: 2000 });
+    }
+    if (!capacity) {
+      setBtnLoading(false);
+      return AppToaster.show({ message: 'Please Enter Availabe Benches!', intent: 'warning', timeout: 2000 });
+    }
+    if (!(capacity>0 && capacity<=34)) {
+      setBtnLoading(false);
+      return AppToaster.show({ message: 'Room Capacity 30 - 34', intent: 'danger', timeout: 2000 });
+    }
 
     try {
       for (const year of selectedYears) {
@@ -73,25 +87,30 @@ export function HallSeatingAllocation() {
     } catch (err) {
       console.error("Allocation failed:", err);
       AppToaster.show({ message: 'Allocation failed', intent: 'danger', timeout: 3000 });
+    } finally {
+      setBtnLoading(false);
     }
   };
 
   const handleResetAll = () => {
     axios.put("api/room/reset/yearAll")
-    axios.delete("api/room/deleteAllRooms")
     .then(
-      setSelectedYears([]),
-      setRoomInput(''),
-      setCapacity(''),
       setDisabledYears([]),
-      setHistory([]),
       localStorage.removeItem("disabledYears"),
-      localStorage.removeItem("allocationHistory"),
-      AppToaster.show({ message: 'Everything was Reseted', intent: 'success', timeout: 2000 })
     )
     .catch((err)=>{
       console.error(`Reset All Year failed:`, err);
       AppToaster.show({ message: 'Failed to reset All Year', intent: 'danger', timeout: 2000 });
+    })
+    axios.delete("api/room/deleteAll")
+    .then(
+      setHistory([]),
+      localStorage.removeItem("allocationHistory"),
+      AppToaster.show({ message: 'Everything was Reseted', intent: 'success', timeout: 2000 })
+    )
+    .catch((err)=>{
+      console.error(`Delete all year failed:`, err);
+      AppToaster.show({ message: 'Failed to delete rooms', intent: 'danger', timeout: 2000 });
     })
   };
 
@@ -160,20 +179,23 @@ export function HallSeatingAllocation() {
               const val = e.target.value;
               if (/^\d*$/.test(val)) setCapacity(val);
             }}
-            placeholder="Max 30 - Min 34"
+            placeholder="Min 30 - Max 34"
             min="1"
             step="1"
           />
         </div>
       </div>
 
-      <button className='btn btn-primary' onClick={handleAllocate}>Allocate Seat</button>
+      <button className='btn btn-primary' onClick={handleAllocate} disabled={btnLoading} >
+        {btnLoading ? <span className='button-spinner' /> : "Allocate Seat"}
+      </button>
 
-      <h3 className='sub-title'>allocation history</h3>
       {history.length === 0 ? (
-        <p className='no-data-available'>No allocations yet.</p>
+        <></>
+        // <p className='no-data-available'>No allocations yet.</p>
       ) : (
         <>
+        <h3 className='sub-title'>Allocation history</h3>
           <table className={Styles.table}>
             <thead>
               <tr>

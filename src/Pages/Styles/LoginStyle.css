@@ -20,7 +20,7 @@
     justify-content:space-evenly;
   }
 
-  .login-title Button {
+  .login-title button {
     font-size: 1.2rem;
     font-weight: 700;
     margin-bottom: 2rem;
@@ -32,7 +32,7 @@
     cursor: pointer;
   }
 
-  .login-title Button.selected {
+  .login-title button.selected {
     transform: scale(1.2);
     color: #007bff;
   }
@@ -53,11 +53,9 @@
     font-weight: bold;
   }
 
-  .login-input {
-    margin-bottom: 1.5rem;
-  }
-
   .login-button {
+    background-color: #007bff;
+    color: white;
     width: 100%;
     margin-top: 6px;
     padding: 10px;
@@ -66,4 +64,57 @@
     border-radius: 6px;
     border: none;
     transition: background-color 0.3s;
+    cursor: pointer;
   }
+
+  .login-button:hover {
+    background-color: #0056b3;
+  }
+
+  .password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  }
+
+.login-input {
+  margin-bottom: 2rem;
+  width: 100%;
+  padding: 5px;
+  outline: none;
+}
+
+.login-input:focus {
+  border-color: rgba(0, 0, 0, 0.832);
+  border-width: 2px;
+}
+
+.eye-button {
+  position: absolute;
+  right: 5px;
+  top: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #333;
+  transition: color 0.2s ease;
+}
+
+.eye-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-inner-spin-button,
+input[type="password"]::-webkit-clear-button,
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none !important;
+}
+
+input[type="password"]::-webkit-input-decoration-container {
+  display: none !important;
+}

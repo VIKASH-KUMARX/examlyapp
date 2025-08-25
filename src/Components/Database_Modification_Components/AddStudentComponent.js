@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, InputGroup, Position, Toaster } from '@blueprintjs/core';
+import { Position, Toaster } from '@blueprintjs/core';
 
 const AppToaster = Toaster.create({
   position: Position.TOP,
@@ -10,8 +10,10 @@ export function AddStudentComponent({ API , setRefresh}) {
   const [newName, setNewName] = useState('');
   const newRoomNo = '';
   const [newCourses, setNewCourses] = useState('');
+  const [btnLoading, setButLoading] = useState(false);  
 
   function addStudent() {
+    setButLoading(true);
     if (newRegNo.trim().length > 0 && newName.trim().length > 0 && newCourses.trim().length > 0) {
       const regnumRaw = newRegNo.trim();
       const regnum = Number(regnumRaw);
@@ -24,6 +26,7 @@ export function AddStudentComponent({ API , setRefresh}) {
           intent: 'danger',
           timeout: 2000,
         });
+        setButLoading(false);
         return;
       }
 
@@ -38,6 +41,7 @@ export function AddStudentComponent({ API , setRefresh}) {
           intent: 'danger',
           timeout: 2000,
         });
+        setButLoading(false);
         return;
       }
 
@@ -68,6 +72,7 @@ export function AddStudentComponent({ API , setRefresh}) {
               timeout: 2000,
             });
           }
+          setButLoading(false);
         });
     } else {
       AppToaster.show({
@@ -75,6 +80,7 @@ export function AddStudentComponent({ API , setRefresh}) {
         intent: 'warning',
         timeout: 2000,
       });
+      setButLoading(false);
     }
   }
 
@@ -111,6 +117,8 @@ export function AddStudentComponent({ API , setRefresh}) {
         intent: 'danger',
         timeout: 2000,
       });
+    } finally {
+      setButLoading(false);
     }
   }
 
@@ -134,8 +142,8 @@ export function AddStudentComponent({ API , setRefresh}) {
         placeholder="Add courses (comma separated)"
         style={{ width: '300px' }}
       />
-      <button className='btn btn-success' onClick={addStudent}>
-        Add Student
+      <button className='btn btn-success' onClick={addStudent} disabled={btnLoading} >
+        {btnLoading ? <span className='button-spinner'></span> : 'Add Student'}
       </button>
     </div>
   );

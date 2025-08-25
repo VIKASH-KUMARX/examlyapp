@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import Loader from '../../../Components/loader';
 
 export function FullCourseList() {
   const [courses, setCourses] = useState([]);
@@ -20,7 +21,7 @@ export function FullCourseList() {
       });
   }, []);
 
-  if (loading) return <p style={{alignContent:'center'}}>Loading courses...</p>;
+  if (loading) return <Loader />;
 
 return (
   <div className='table-container'>

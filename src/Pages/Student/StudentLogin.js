@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, InputGroup, Toaster, Position } from '@blueprintjs/core';
+import { Toaster, Position } from '@blueprintjs/core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const AppToaster = Toaster.create({
   position: Position.TOP,
@@ -63,13 +65,13 @@ export function StudentLogin() {
     <div className="login-container">
       <div className="login-box">
         <div className="login-title">
-          <Button className='selected'>Student Login</Button>
-          <Button onClick={goToAdminLogin}>Admin Login</Button>
+          <button className='selected'>Student Login</button>
+          <button onClick={goToAdminLogin}>Admin Login</button>
         </div>
         <label className="login-label">
           Register number <span className="required">*</span>
         </label>
-        <InputGroup
+        <input
           className="login-input"
           placeholder="Enter Register Number"
           value={regno}
@@ -79,24 +81,26 @@ export function StudentLogin() {
         <label className="login-label">
           Password <span className="required">*</span>
         </label>
-        <InputGroup
-          className="login-input"
-          rightElement={
-            <Button
-              minimal
-              icon={showPassword ? 'eye-off' : 'eye-open'}
-              onClick={() => setShowPassword((prev) => !prev)}
-            />
-          }
-          type={showPassword ? 'text' : 'password'}
-          placeholder="Enter Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div className="password-wrapper">
+          <input
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Enter Password"
+            className="login-input"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button
+            type="button"
+            className="eye-button"
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+          </button>
+        </div>
 
-        <Button className="login-button" intent='primary' onClick={handleLogin}>
+        <button className="login-button" onClick={handleLogin}>
           Login
-        </Button>
+        </button>
       </div>
     </div>
   );

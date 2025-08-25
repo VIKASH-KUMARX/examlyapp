@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { YearOneStudents } from './Database_Modification/YearOneStudents';
 import { YearTwoStudents } from './Database_Modification/YearTwoStudents';
 import { YearThreeStudents } from './Database_Modification/YearThreeStudents';
