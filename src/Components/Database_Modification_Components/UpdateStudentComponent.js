@@ -8,21 +8,21 @@ const AppToaster = Toaster.create({
 export function UpdateStudentComponent({ API ,setRefresh}) {
   const [regnumInput, setRegnumInput] = useState('');
   const [studentData, setStudentData] = useState(null);
-  const [btnLoading, setButLoading] = useState(false);
-  const [btnLoading1, setButLoading1] = useState(false);
+  const [btnLoading, setBtnLoading] = useState(false);
+  const [btnLoading1, setBtnLoading1] = useState(false);
 
   const fetchStudent = () => {
-    setButLoading(true);
+    setBtnLoading(true);
     if (!regnumInput) {
       AppToaster.show({ message: 'Enter a Registration Number', intent: 'warning', timeout: 2000 });
-      setButLoading(false);
+      setBtnLoading(false);
       return;
     }
 
     fetch(`${API}/${regnumInput}`)
       .then((res) => {
         if (!res.ok) throw new Error('Student not found');
-        setButLoading(false);
+        setBtnLoading(false);
         return res.json();
       })
       .then((data) => {
@@ -31,22 +31,22 @@ export function UpdateStudentComponent({ API ,setRefresh}) {
           data.courses.split(',').join(', ')
           : '';
         setStudentData({ ...data, courses: cleanedCourses });
-        setButLoading(false);
+        setBtnLoading(false);
       })
       .catch((err) =>{
         if(err.message==='Student not found')
           AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000 })
         else
           console.error('Error in Student fetch! : ',err)
-        setButLoading(false);
+        setBtnLoading(false);
       });
   };
 
   const updateStudent = () => {
-    setButLoading1(true);
+    setBtnLoading1(true);
     if (!studentData.name || !studentData.courses) {
       AppToaster.show({ message: 'All fields are required!', intent: 'warning', timeout: 2000 });
-      setButLoading1(false);
+      setBtnLoading1(false);
       return;
     }
 
@@ -55,7 +55,7 @@ export function UpdateStudentComponent({ API ,setRefresh}) {
 
     if (studentData.name.length===0 || studentData.courses.length===0) {
       AppToaster.show({ message: 'All fields are required!', intent: 'warning', timeout: 2000 });
-      setButLoading1(false);
+      setBtnLoading1(false);
       return;
     }
     
@@ -70,7 +70,7 @@ export function UpdateStudentComponent({ API ,setRefresh}) {
         setRegnumInput('')
         setStudentData(null)
         setRefresh(prev=>!prev);
-        setButLoading1(false);
+        setBtnLoading1(false);
         return res.json();
       })
       .catch((err) =>{
@@ -78,7 +78,7 @@ export function UpdateStudentComponent({ API ,setRefresh}) {
           AppToaster.show({ message: err.message, intent: 'danger', timeout: 3000 })
         else
           console.error('Error in Student update : ',err)
-        setButLoading1(false);
+        setBtnLoading1(false);
       });
   };
 
